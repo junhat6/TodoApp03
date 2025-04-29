@@ -26,6 +26,17 @@ function onAdd() {
     </div>
 </template>
 
-<style scoped>
 
+<style scoped>
+.todo-input {
+  display: flex;
+  gap: 0.5rem;
+}
+.todo-input input {
+  flex: 1;
+  padding: 0.5rem;
+}
+.todo-input button {
+  padding: 0.5rem 1rem;
+}
 </style>
