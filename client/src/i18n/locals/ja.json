@@ -1,0 +1,18 @@
+{
+  "app": {
+    "title": "Todo アプリ",
+    "categories": {
+      "all": "すべて",
+      "work": "仕事",
+      "personal": "個人",
+      "shopping": "買い物",
+      "other": "その他"
+    },
+    "task": {
+      "add": "タスクを追加",
+      "placeholder": "タスクを入力してください",
+      "remaining": "残り {count} タスク",
+      "empty": "タスクがありません"
+    }
+  }
+}

@@ -1,9 +1,25 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
+import i18n from "./i18n";
 
-const pinia = createPinia();
+// グローバルスタイルのインポート
+import "./assets/styles/global.css";
+
+// MSWのモックサーバーを開発環境で起動
+if (import.meta.env.DEV) {
+  console.log("モックAPIを使用します");
+  const { worker } = await import("./mocks/browser");
+  await worker.start({
+    onUnhandledRequest: "bypass", // 未処理のリクエストをスキップ
+  });
+}
+
 const app = createApp(App);
 
-app.use(pinia);
+// Piniaストアを追加
+app.use(createPinia());
+// i18nを追加
+app.use(i18n);
+
 app.mount("#app");

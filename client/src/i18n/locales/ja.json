@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Todo アプリ",
+    "darkMode": "ダークモード",
+    "categories": {
+      "all": "すべて",
+      "work": "仕事",
+      "personal": "個人",
+      "shopping": "買い物",
+      "other": "その他"
+    },
+    "task": {
+      "add": "タスクを追加",
+      "placeholder": "タスクを入力してください",
+      "category": "カテゴリー",
+      "remaining": "残り {count} タスク",
+      "remainingCategory": "{category}: 残り {count}",
+      "delete": "削除",
+      "complete": "完了",
+      "empty": "タスクがありません",
+      "emptyCategory": "{category}カテゴリのタスクがありません",
+      "loading": "読み込み中..."
+    },
+    "action": {
+      "deleteAll": "すべて削除",
+      "deleteCategory": "{category}を削除",
+      "confirm": "本当に削除しますか？",
+      "cancel": "キャンセル",
+      "ok": "OK"
+    },
+    "error": {
+      "load": "Todo読み込みエラー: {message}",
+      "add": "Todo追加エラー: {message}",
+      "update": "Todo更新エラー: {message}",
+      "delete": "Todo削除エラー: {message}",
+      "deleteAll": "全タスク削除エラー: {message}",
+      "deleteCategory": "カテゴリー削除エラー: {message}",
+      "invalidCategory": "有効なカテゴリーを指定してください",
+      "emptyTask": "タスク内容を入力してください"
+    }
+  }
+}

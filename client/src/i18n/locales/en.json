@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Todo App",
+    "darkMode": "Dark Mode",
+    "categories": {
+      "all": "All",
+      "work": "Work",
+      "personal": "Personal",
+      "shopping": "Shopping",
+      "other": "Other"
+    },
+    "task": {
+      "add": "Add Task",
+      "placeholder": "Enter your task",
+      "category": "Category",
+      "remaining": "{count} task(s) remaining",
+      "remainingCategory": "{category}: {count} remaining",
+      "delete": "Delete",
+      "complete": "Complete",
+      "empty": "No tasks",
+      "emptyCategory": "No tasks in {category} category",
+      "loading": "Loading..."
+    },
+    "action": {
+      "deleteAll": "Delete All",
+      "deleteCategory": "Delete {category}",
+      "confirm": "Are you sure you want to delete?",
+      "cancel": "Cancel",
+      "ok": "OK"
+    },
+    "error": {
+      "load": "Error loading todos: {message}",
+      "add": "Error adding todo: {message}",
+      "update": "Error updating todo: {message}",
+      "delete": "Error deleting todo: {message}",
+      "deleteAll": "Error deleting all tasks: {message}",
+      "deleteCategory": "Error deleting category: {message}",
+      "invalidCategory": "Please specify a valid category",
+      "emptyTask": "Please enter a task"
+    }
+  }
+}
