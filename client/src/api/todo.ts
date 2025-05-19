@@ -46,6 +46,11 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
     }
   }
 
+  // DELETEリクエストの場合は空のレスポンスを返す
+  if (response.status === 204) {
+    return {} as T;
+  }
+
   return response.json() as Promise<T>;
 };
 
@@ -62,7 +67,10 @@ export const TodoApi = {
       const response = await fetchWithTimeout(API_ENDPOINTS.TODOS, {
         method: "GET",
       });
-      return await handleResponse<Todo[]>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error("Todo取得エラー:", error);
       throw error;
@@ -85,9 +93,31 @@ export const TodoApi = {
         headers: DEFAULT_HEADERS,
         body: JSON.stringify({ text, category }),
       });
-      return await handleResponse<Todo>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error("Todo追加エラー:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * 指定IDのTodoを取得
+   * @param id 対象TodoのID
+   */
+  async getById(id: number): Promise<Todo> {
+    try {
+      const response = await fetchWithTimeout(API_ENDPOINTS.TODO_BY_ID(id), {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Todo取得エラー (ID: ${id}):`, error);
       throw error;
     }
   },
@@ -98,10 +128,18 @@ export const TodoApi = {
    */
   async toggle(id: number): Promise<Todo> {
     try {
-      const response = await fetchWithTimeout(API_ENDPOINTS.TODO_BY_ID(id), {
-        method: "PUT",
+      const todo = await this.getById(id);
+      const endpoint = todo.completed
+        ? `${API_ENDPOINTS.TODO_BY_ID(id)}/incomplete`
+        : `${API_ENDPOINTS.TODO_BY_ID(id)}/complete`;
+
+      const response = await fetchWithTimeout(endpoint, {
+        method: "PATCH",
       });
-      return await handleResponse<Todo>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error(`Todo状態変更エラー (ID: ${id}):`, error);
       throw error;
@@ -117,7 +155,9 @@ export const TodoApi = {
       const response = await fetchWithTimeout(API_ENDPOINTS.TODO_BY_ID(id), {
         method: "DELETE",
       });
-      await handleResponse<void>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
     } catch (error) {
       console.error(`Todo削除エラー (ID: ${id}):`, error);
       throw error;
@@ -132,7 +172,9 @@ export const TodoApi = {
       const response = await fetchWithTimeout(API_ENDPOINTS.TODOS, {
         method: "DELETE",
       });
-      await handleResponse<void>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
     } catch (error) {
       console.error("全Todo削除エラー:", error);
       throw error;
@@ -153,7 +195,9 @@ export const TodoApi = {
         `${API_ENDPOINTS.TODOS}/category/${encodeURIComponent(category)}`,
         { method: "DELETE" }
       );
-      await handleResponse<void>(response);
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
     } catch (error) {
       console.error(`カテゴリー別削除エラー (カテゴリ: ${category}):`, error);
       throw error;
