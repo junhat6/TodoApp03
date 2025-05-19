@@ -7,7 +7,7 @@ import i18n from "./i18n";
 import "./assets/styles/global.css";
 
 // MSWのモックサーバーを開発環境で起動
-if (import.meta.env.DEV) {
+if (import.meta.env.DEV && import.meta.env.VITE_USE_MSW === "true") {
   console.log("モックAPIを使用します");
   const { worker } = await import("./mocks/browser");
   await worker.start({
