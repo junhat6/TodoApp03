@@ -6,15 +6,15 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate # デーブル構造の自動更新を無効化
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect # PostgreSQLの方言を指定
+        format_sql: true # SQLのフォーマットを有効化
+    show-sql: true # SQLの実行ログを有効化
   flyway:
-    enabled: true
-    baseline-on-migrate: true
+    enabled: true # Flywayの有効化
+    baseline-on-migrate: true # マイグレーション実行時にベースラインを作成
 
 server:
   port: 8080
@@ -24,4 +24,4 @@ server:
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE 
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

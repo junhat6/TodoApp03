@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 import type { Todo } from '../types/todo';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   todo: Todo
@@ -10,6 +11,8 @@ const emit = defineEmits<{
   (e: 'toggle', id: number): void
   (e: 'remove', id: number): void
 }>();
+
+const { t } = useI18n();
 
 function toggleTodo() {
   emit('toggle', props.todo.id);
@@ -38,7 +41,9 @@ function removeTodo() {
         </svg>
       </button>
       <span class="todo-text">{{ todo.text }}</span>
-      <span v-if="todo.category" class="category-badge">{{ todo.category }}</span>
+      <span v-if="todo.category" class="category-badge">
+        {{ t('app.categories.' + todo.category) }}
+      </span>
     </div>
     <button 
       class="delete-button" 
