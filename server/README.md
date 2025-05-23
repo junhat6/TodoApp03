@@ -62,4 +62,55 @@ DDDのレイヤード・アーキテクチャに沿った構成になってい�
 | PUT    | /api/todos/{id} | 指定IDのTodoを更新 |
 | PATCH  | /api/todos/{id}/complete | Todoを完了済みにする |
 | PATCH  | /api/todos/{id}/incomplete | Todoを未完了に戻す |
-| DELETE | /api/todos/{id} | 指定IDのTodoを削除 | 
+| DELETE | /api/todos/{id} | 指定IDのTodoを削除 |
+
+## 操作手順
+
+### データベース操作
+
+1. マイグレーションの実行
+```bash
+./gradlew flywayMigrate
+```
+
+2. マイグレーションのリセット（開発環境用）
+```bash
+./gradlew flywayClean flywayMigrate
+```
+
+### テスト
+
+1. ユニットテストの実行
+```bash
+./gradlew test
+```
+
+2. 統合テストの実行
+```bash
+./gradlew integrationTest
+```
+
+### デバッグ
+
+1. ログの確認
+```bash
+tail -f build/tmp/bootRun/output.txt
+```
+
+2. データベース接続の確認
+```bash
+psql -h localhost -U postgres -d todo_app
+```
+
+### トラブルシューティング
+
+1. ポートが使用中の場合
+```bash
+lsof -i :8080
+kill -9 <PID>
+```
+
+2. データベース接続エラーの場合
+- PostgreSQLが起動していることを確認
+- 接続情報（application.yml）を確認
+- データベースが存在することを確認 
