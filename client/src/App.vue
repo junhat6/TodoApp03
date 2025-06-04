@@ -1,27 +1,50 @@
 <script setup lang="ts">
+// Vue 3のComposition APIから必要な関数をインポート
+// ref: リアクティブなデータを作成
+// computed: 算出プロパティを作成（依存関係に基づいて自動更新）
 import { ref, computed } from 'vue';
+
+// i18n（国際化）のコンポーザブル関数をインポート
+// t関数で翻訳テキストにアクセス可能
 import { useI18n } from 'vue-i18n';
+
+// 子コンポーネントをインポート
 import TodoInput from './components/TodoInput.vue';
 import TodoList from './components/TodoList.vue';
 import DeleteAllButton from './components/DeleteAllButton.vue';
 import AppHeader from './components/AppHeader.vue';
+
+// Piniaストアをインポート
+// アプリケーション全体の状態管理を担当
 import { useTodoStore } from './store/todo';
+
+// カテゴリー定数をインポート
 import { CATEGORIES, ALL_CATEGORIES } from './constants/categories';
 import type { CategoryId } from './constants/categories';
 
+// i18nのt関数を取得（翻訳用）
 const { t } = useI18n();
+
+// Todoストアインスタンスを取得
+// 状態管理の中央集権化
 const store = useTodoStore();
+
+// 現在選択されているカテゴリーを管理するリアクティブな変数
+// デフォルトは「すべて」のカテゴリー
 const selectedCategory = ref<CategoryId>(ALL_CATEGORIES);
 
-// カテゴリ別の残りタスク数を計算
+// カテゴリ別の残りタスク数を計算する算出プロパティ
+// selectedCategoryやstore.todosが変更されると自動的に再計算される
 const categoryRemaining = computed(() => {
   return store.getRemainingByCategory(selectedCategory.value);
 });
 
-// すべてのタスクの残り数
+// すべてのタスクの残り数を取得する算出プロパティ
+// ストアのgetterを使用してリアクティブに値を取得
 const totalRemaining = computed(() => store.remaining);
 
-// カテゴリタブの選択
+// カテゴリタブの選択処理
+// ユーザーがタブをクリックした時に呼び出される
 function selectCategory(category: CategoryId) {
   selectedCategory.value = category;
 }

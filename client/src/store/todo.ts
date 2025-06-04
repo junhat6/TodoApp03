@@ -12,6 +12,7 @@ interface TodoState {
 
 /**
  * Todoの状態管理ストア
+ * アプリケーション全体でTodoに関する状態とロジックを管理
  */
 export const useTodoStore = defineStore("todo", {
   state: (): TodoState => ({
@@ -26,7 +27,7 @@ export const useTodoStore = defineStore("todo", {
       this.error = message;
       console.error(message);
 
-      // 3秒後にエラーをクリア
+      // 3秒後にエラーをクリア（UXの向上）
       setTimeout(() => {
         this.clearError();
       }, 3000);
@@ -43,6 +44,7 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * 全Todoを読み込む
+     * アプリケーション起動時やリフレッシュ時に呼び出される
      */
     async loadTodo() {
       this.setLoading(true);
@@ -64,6 +66,8 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * 新しいTodoを追加
+     * @param text - タスクの内容
+     * @param category - タスクのカテゴリー
      */
     async addTodo(text: string, category: string) {
       if (!text.trim()) {
@@ -90,6 +94,7 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * Todoの完了状態を切り替え
+     * @param id - 切り替えるTodoのID
      */
     async toggleTodo(id: number) {
       this.clearError();
@@ -110,6 +115,7 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * 指定IDのTodoを削除
+     * @param id - 削除するTodoのID
      */
     async removeTodo(id: number) {
       this.clearError();
@@ -128,6 +134,7 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * すべてのTodoを削除
+     * 一括削除機能で使用
      */
     async removeAllTodos() {
       this.setLoading(true);
@@ -150,6 +157,7 @@ export const useTodoStore = defineStore("todo", {
     /**
      * カテゴリー別タスク削除
      * サーバーサイドでサポートされている場合はAPIを利用、そうでなければクライアント側で実装
+     * @param category - 削除するカテゴリー
      */
     async removeTodosByCategory(category: string) {
       if (!category || category === ALL_CATEGORIES) {
@@ -161,12 +169,10 @@ export const useTodoStore = defineStore("todo", {
       this.clearError();
 
       try {
-        // APIがサポートされていれば使用
         try {
           await TodoApi.removeByCategory(category);
           this.todos = this.todos.filter((todo) => todo.category !== category);
         } catch (apiError) {
-          // API未サポートの場合はクライアント側で実装
           console.warn("カテゴリ削除API未サポート、クライアント側で処理します");
           this.todos = this.todos.filter((todo) => todo.category !== category);
         }
@@ -184,11 +190,15 @@ export const useTodoStore = defineStore("todo", {
   getters: {
     /**
      * 未完了タスク数
+     * ホーム画面での統計表示に使用
      */
     remaining: (state) => state.todos.filter((todo) => !todo.completed).length,
 
     /**
      * 特定カテゴリーの未完了タスク数
+     * カテゴリー別の統計表示に使用
+     * @param category - 対象カテゴリー
+     * @returns カテゴリー内の未完了タスク数
      */
     getRemainingByCategory: (state) => (category: string) => {
       if (category === ALL_CATEGORIES) {
@@ -201,6 +211,9 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * 特定カテゴリーのタスク
+     * カテゴリー別表示のフィルタリングに使用
+     * @param category - 対象カテゴリー
+     * @returns カテゴリーに属するタスクの配列
      */
     getTodosByCategory: (state) => (category: string) => {
       if (category === ALL_CATEGORIES) {
@@ -211,16 +224,20 @@ export const useTodoStore = defineStore("todo", {
 
     /**
      * 現在読み込み中か
+     * ローディングスピナーの表示制御に使用
      */
     isLoading: (state) => state.loading,
 
     /**
      * 現在のエラーメッセージ
+     * エラー表示の制御に使用
      */
     errorMessage: (state) => state.error,
 
     /**
      * カテゴリー別タスク数
+     * 統計情報やダッシュボード表示に使用可能
+     * @returns カテゴリー名をキー、タスク数を値とするオブジェクト
      */
     todoCountByCategory: (state) => {
       const counts: Record<string, number> = {};

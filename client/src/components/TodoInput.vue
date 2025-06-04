@@ -1,12 +1,25 @@
 <script setup lang="ts">
+// Vue 3のComposition APIから必要な関数をインポート
+// ref: リアクティブな変数を作成
+// watch: リアクティブデータの変更を監視
+// defineProps: プロパティの型定義
 import { ref, watch, defineProps } from 'vue';
+
+// i18n（国際化）のコンポーザブル関数をインポート
 import { useI18n } from 'vue-i18n';
+
+// Piniaストアをインポート
 import { useTodoStore } from '../store/todo';
+
+// カテゴリー関連の定数をインポート
 import { CATEGORY_IDS, DEFAULT_CATEGORY, ALL_CATEGORIES } from '../constants/categories';
 import type { CategoryId } from '../constants/categories';
 
+// i18nのt関数を取得（翻訳用）
 const { t } = useI18n();
 
+// プロパティの型定義
+// 親コンポーネントから現在選択されているカテゴリーを受け取る
 const props = defineProps({
   selectedCategory: {
     type: String as () => CategoryId,
@@ -14,42 +27,59 @@ const props = defineProps({
   }
 });
 
+// Todoストアインスタンスを取得
 const store = useTodoStore();
+
+// 入力フィールドのテキストを管理するリアクティブ変数
 const text = ref('');
+
+// 新規タスクに設定するカテゴリーを管理するリアクティブ変数
 const selectedCategory = ref<CategoryId>(DEFAULT_CATEGORY);
+
+// カテゴリードロップダウンの表示状態を管理
 const showCategoryDropdown = ref(false);
 
 // カテゴリーの選択リスト（「すべて」を除外）
+// 新規タスク作成時は具体的なカテゴリーのみ選択可能
 const categoryOptions = [
-  CATEGORY_IDS.WORK,
-  CATEGORY_IDS.PERSONAL, 
-  CATEGORY_IDS.SHOPPING, 
-  CATEGORY_IDS.OTHER
+  CATEGORY_IDS.WORK,      // 仕事
+  CATEGORY_IDS.PERSONAL,  // 個人
+  CATEGORY_IDS.SHOPPING,  // 買い物
+  CATEGORY_IDS.OTHER      // その他
 ];
 
 // 選択されたカテゴリータブが変更されたときに反映
+// watch関数でプロパティの変更を監視し、自動的に入力フォームのカテゴリーを同期
 watch(() => props.selectedCategory, (newCategory) => {
+  // 「すべて」以外の有効なカテゴリーが選択された場合
   if (newCategory !== ALL_CATEGORIES && categoryOptions.includes(newCategory)) {
     selectedCategory.value = newCategory;
   }
-}, { immediate: true });
+}, { immediate: true }); // immediate: true で初期化時にも実行
 
+// 新規タスク追加処理
 function onAdd() {
+  // 入力値をトリムして検証
   const v = text.value && text.value.trim();
-  if (!v) return;
+  if (!v) return; // 空の場合は処理終了
 
   // カテゴリ情報を含めてTodoを追加
+  // ストアのaddTodoアクションを呼び出し
   store.addTodo(v, selectedCategory.value);
+  
+  // 入力フィールドをクリア
   text.value = '';
 }
 
+// カテゴリードロップダウンの表示切り替え
 function toggleCategoryDropdown() {
   showCategoryDropdown.value = !showCategoryDropdown.value;
 }
 
+// ドロップダウンからカテゴリーを選択
 function selectCategory(category: CategoryId) {
   selectedCategory.value = category;
-  showCategoryDropdown.value = false;
+  showCategoryDropdown.value = false; // ドロップダウンを閉じる
 }
 </script>
 

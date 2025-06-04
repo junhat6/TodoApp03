@@ -1,24 +1,42 @@
 <script setup lang="ts">
+// Vue 3のComposition APIから必要な関数をインポート
+// defineProps: 親からのプロパティを定義
+// defineEmits: 親へのイベントを定義
 import { defineProps, defineEmits } from 'vue';
+
+// Todoアイテムの型定義をインポート
 import type { Todo } from '../types/todo';
+
+// i18n（国際化）のコンポーザブル関数をインポート
 import { useI18n } from 'vue-i18n';
 
+// プロパティの型定義
+// 親コンポーネントから個々のTodoオブジェクトを受け取る
 const props = defineProps<{
   todo: Todo
 }>();
 
+// イベントの型定義
+// 親コンポーネントに対して発火するイベントを定義
 const emit = defineEmits<{
-  (e: 'toggle', id: number): void
-  (e: 'remove', id: number): void
+  (e: 'toggle', id: number): void    // 完了状態切り替えイベント
+  (e: 'remove', id: number): void    // 削除イベント
 }>();
 
+// i18nのt関数を取得（翻訳用）
 const { t } = useI18n();
 
+// Todo完了状態の切り替え処理
+// チェックボックスがクリックされた時に呼び出される
 function toggleTodo() {
+  // 親コンポーネントにtoggleイベントを発火
   emit('toggle', props.todo.id);
 }
 
+// Todo削除処理
+// 削除ボタンがクリックされた時に呼び出される
 function removeTodo() {
+  // 親コンポーネントにremoveイベントを発火
   emit('remove', props.todo.id);
 }
 </script>

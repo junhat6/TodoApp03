@@ -1,15 +1,26 @@
 <script setup lang="ts">
+// Vue 3のComposition APIから必要な関数をインポート
+// ref: リアクティブな変数を作成
+// onMounted: コンポーネントがマウントされた時に実行
 import { ref, onMounted } from 'vue';
+
+// i18n（国際化）のコンポーザブル関数をインポート
 import { useI18n } from 'vue-i18n';
 
-// i18nの設定
+// i18nの設定を取得
+// t: 翻訳関数、locale: 現在の言語設定
 const { t, locale } = useI18n();
 
+// ダークモードの状態を管理するリアクティブ変数
 const isDarkMode = ref(false);
 
-// ダークモードの切り替え
+// ダークモードの切り替え処理
 function toggleDarkMode() {
+  // 現在の状態を反転
   isDarkMode.value = !isDarkMode.value;
+  
+  // DOMのHTML要素にダークモードクラスを追加/削除
+  // CSSのダークモードスタイルが適用される
   if (isDarkMode.value) {
     document.documentElement.classList.add('dark');
   } else {
@@ -18,14 +29,17 @@ function toggleDarkMode() {
 }
 
 // システムのダークモード設定を確認（初期化時）
+// ユーザーのOS設定に基づいて初期テーマを決定
 onMounted(() => {
+  // matchMediaでシステムのカラースキーム設定を確認
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     isDarkMode.value = true;
     document.documentElement.classList.add('dark');
   }
 });
 
-// 言語切り替え
+// 言語切り替え処理
+// 日本語と英語を切り替える
 function toggleLanguage() {
   locale.value = locale.value === 'ja' ? 'en' : 'ja';
 }

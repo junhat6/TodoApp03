@@ -1,13 +1,29 @@
 <script setup lang="ts">
+// Vue 3のComposition APIから必要な関数をインポート
+// onMounted: コンポーネントがマウントされた時に実行
+// computed: 算出プロパティを作成
+// defineProps: プロパティの型定義
 import { onMounted, computed, defineProps } from 'vue';
+
+// i18n（国際化）のコンポーザブル関数をインポート
 import { useI18n } from 'vue-i18n';
+
+// Piniaストアをインポート
 import { useTodoStore } from '../store/todo';
+
+// 子コンポーネントをインポート
+// 個々のTodoアイテムを表示する責任を持つ
 import TodoItem from './TodoItem.vue';
+
+// カテゴリー関連の定数をインポート
 import { ALL_CATEGORIES } from '../constants/categories';
 import type { CategoryId } from '../constants/categories';
 
+// i18nのt関数を取得（翻訳用）
 const { t } = useI18n();
 
+// プロパティの型定義
+// 親コンポーネントから現在選択されているカテゴリーを受け取る
 const props = defineProps({
   selectedCategory: {
     type: String as () => CategoryId,
@@ -15,28 +31,37 @@ const props = defineProps({
   }
 });
 
+// Todoストアインスタンスを取得
 const store = useTodoStore();
 
-// 選択されたカテゴリーでフィルタリングされたTodo
+// 選択されたカテゴリーでフィルタリングされたTodoを取得する算出プロパティ
+// selectedCategoryが変更されると自動的に再計算される
 const filteredTodos = computed(() => {
   return store.getTodosByCategory(props.selectedCategory);
 });
 
 // ローディング状態の取得
+// API通信中などの状態を表示するために使用
 const isLoading = computed(() => store.isLoading);
 
 // エラーメッセージの取得
+// API通信エラーなどを表示するために使用
 const errorMessage = computed(() => store.errorMessage);
 
-// イベントハンドラー
+// Todoの完了状態切り替えイベントハンドラー
+// 子コンポーネント（TodoItem）からのイベントを受け取る
 function handleToggle(id: number) {
   store.toggleTodo(id);
 }
 
+// Todo削除イベントハンドラー
+// 子コンポーネント（TodoItem）からのイベントを受け取る
 function handleRemove(id: number) {
   store.removeTodo(id);
 }
 
+// コンポーネントがマウントされた時に実行
+// 初期データの読み込みを行う
 onMounted(async () => {
   await store.loadTodo();
 });
