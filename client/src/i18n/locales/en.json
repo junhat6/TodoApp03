@@ -2,6 +2,10 @@
   "app": {
     "title": "Todo App",
     "darkMode": "Dark Mode",
+    "sidebar": {
+      "todo": "TODO",
+      "habits": "Habits"
+    },
     "categories": {
       "all": "All",
       "work": "Work",

@@ -15,6 +15,8 @@ import i18n from "./i18n";
 
 // グローバルスタイルのインポート
 // 全体的なデザインシステムとテーマ設定
+import "./assets/styles/theme.css";
+import "./assets/styles/base.css";
 import "./assets/styles/global.css";
 
 // MSW（Mock Service Worker）のモックサーバーを開発環境で起動

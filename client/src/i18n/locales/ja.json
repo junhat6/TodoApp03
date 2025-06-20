@@ -2,6 +2,10 @@
   "app": {
     "title": "Todo アプリ",
     "darkMode": "ダークモード",
+    "sidebar": {
+      "todo": "TODO",
+      "habits": "習慣"
+    },
     "categories": {
       "all": "すべて",
       "work": "仕事",
