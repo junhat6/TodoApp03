@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { onMounted } from 'vue';
+import { profileStore } from '../../store/profile';
 
 // 型定義のインポート
 import type { PageType } from '../../types/navigation';
@@ -20,6 +22,11 @@ const emit = defineEmits<Emits>();
 // i18nのt関数を取得
 const { t } = useI18n();
 
+// プロフィール初期化
+onMounted(async () => {
+  await profileStore.initializeProfile();
+});
+
 // ページ変更ハンドラー
 function handlePageChange(page: PageType) {
   emit('change-page', page);
@@ -30,6 +37,21 @@ function handlePageChange(page: PageType) {
   <aside class="sidebar">
     <nav class="sidebar-nav">
       <h2 class="sidebar-title">{{ t('app.title') }}</h2>
+      
+      <!-- プロフィール情報セクション -->
+      <div v-if="profileStore.profile.value" class="profile-section">
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <svg class="avatar-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
+            </svg>
+          </div>
+          <div class="profile-info">
+            <span class="profile-username">{{ profileStore.profile.value.username }}</span>
+            <span class="profile-level">レベル {{ profileStore.profile.value.level }}</span>
+          </div>
+        </div>
+      </div>
       
       <ul class="nav-menu">
         <li class="nav-item">
@@ -55,6 +77,18 @@ function handlePageChange(page: PageType) {
             {{ t('app.sidebar.habits') }}
           </button>
         </li>
+        
+        <li class="nav-item">
+          <button
+            @click="handlePageChange('profile')"
+            :class="['nav-button', { 'active': currentPage === 'profile' }]"
+          >
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 2C11.1 2 12 2.9 12 4C12 5.1 11.1 6 10 6C8.9 6 8 5.1 8 4C8 2.9 8.9 2 10 2ZM15 8C15.6 8 16 8.4 16 9V19C16 19.6 15.6 20 15 20H5C4.4 20 4 19.6 4 19V9C4 8.4 4.4 8 5 8H15Z"/>
+            </svg>
+            {{ t('app.sidebar.profile') }}
+          </button>
+        </li>
       </ul>
     </nav>
   </aside>
@@ -78,14 +112,70 @@ function handlePageChange(page: PageType) {
 .sidebar-nav {
   padding: 1.5rem;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-title {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--card-foreground);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-align: center;
+}
+
+.profile-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--muted);
+  border-radius: var(--radius);
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.avatar-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-username {
+  font-weight: 600;
+  color: var(--card-foreground);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-level {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
 }
 
 .nav-menu {
@@ -95,6 +185,7 @@ function handlePageChange(page: PageType) {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .nav-item {
@@ -146,7 +237,35 @@ function handlePageChange(page: PageType) {
   
   .sidebar-title {
     font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-section {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .profile-card {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .profile-avatar {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .avatar-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .profile-username {
+    font-size: 0.8rem;
+  }
+  
+  .profile-level {
+    font-size: 0.7rem;
   }
   
   .nav-button {
@@ -179,6 +298,7 @@ function handlePageChange(page: PageType) {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    flex-direction: row;
   }
   
   .sidebar-title {
@@ -187,9 +307,14 @@ function handlePageChange(page: PageType) {
     margin-right: 1rem;
   }
   
+  .profile-section {
+    display: none;
+  }
+  
   .nav-menu {
     flex-direction: row;
     gap: 0;
+    flex: 1;
   }
   
   .nav-button {

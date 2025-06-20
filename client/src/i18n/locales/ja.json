@@ -4,7 +4,8 @@
     "darkMode": "ダークモード",
     "sidebar": {
       "todo": "TODO",
-      "habits": "習慣"
+      "habits": "習慣",
+      "profile": "プロフィール"
     },
     "categories": {
       "all": "すべて",
@@ -24,6 +25,17 @@
       "empty": "タスクがありません",
       "emptyCategory": "{category}カテゴリのタスクがありません",
       "loading": "読み込み中..."
+    },
+    "profile": {
+      "title": "プロフィール",
+      "username": "ユーザー名",
+      "level": "レベル",
+      "joinDate": "登録日",
+      "edit": "編集",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "loading": "読み込み中...",
+      "error": "エラーが発生しました"
     },
     "action": {
       "deleteAll": "すべて削除",

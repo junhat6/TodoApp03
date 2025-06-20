@@ -2,6 +2,7 @@
 import Sidebar from './Sidebar.vue';
 import TodoView from '../../views/TodoView.vue';
 import HabitsView from '../../views/HabitsView.vue';
+import ProfileView from '../../views/ProfileView.vue';
 import { useAppNavigation } from '../../composables/useAppNavigation';
 
 // アプリナビゲーション機能を使用
@@ -18,6 +19,7 @@ const { currentPage, handlePageChange } = useAppNavigation();
     <main class="main-content">
       <TodoView v-if="currentPage === 'todo'" />
       <HabitsView v-else-if="currentPage === 'habits'" />
+      <ProfileView v-else-if="currentPage === 'profile'" />
     </main>
   </div>
 </template>

@@ -4,7 +4,8 @@
     "darkMode": "Dark Mode",
     "sidebar": {
       "todo": "TODO",
-      "habits": "Habits"
+      "habits": "Habits",
+      "profile": "Profile"
     },
     "categories": {
       "all": "All",
@@ -24,6 +25,17 @@
       "empty": "No tasks",
       "emptyCategory": "No tasks in {category} category",
       "loading": "Loading..."
+    },
+    "profile": {
+      "title": "Profile",
+      "username": "Username",
+      "level": "Level",
+      "joinDate": "Join Date",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "loading": "Loading...",
+      "error": "An error occurred"
     },
     "action": {
       "deleteAll": "Delete All",

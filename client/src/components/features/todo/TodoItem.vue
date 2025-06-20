@@ -5,7 +5,7 @@
 import { defineProps, defineEmits } from 'vue';
 
 // Todoアイテムの型定義をインポート
-import type { Todo } from '../types/todo';
+import type { Todo } from '../../../types/todo';
 
 // i18n（国際化）のコンポーザブル関数をインポート
 import { useI18n } from 'vue-i18n';

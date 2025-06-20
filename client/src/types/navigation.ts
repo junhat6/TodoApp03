@@ -3,4 +3,4 @@
  */
 
 // 現在のページの型定義
-export type PageType = 'todo' | 'habits'; 
+export type PageType = 'todo' | 'habits' | 'profile'; 

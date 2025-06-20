@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { TodoApi } from "../api/todo";
 import type { Todo } from "../types/todo";
 import { ALL_CATEGORIES } from "../constants/categories";
+import { profileStore } from "./profile";
 
 interface TodoState {
   todos: Todo[];
@@ -100,10 +101,16 @@ export const useTodoStore = defineStore("todo", {
       this.clearError();
 
       try {
+        const todoToToggle = this.todos.find(todo => todo.id === id);
         const updated = await TodoApi.toggle(id);
         this.todos = this.todos.map((todo) =>
           todo.id === id ? updated : todo
         );
+        
+        // タスクが完了状態になった場合、レベルアップを実行
+        if (todoToToggle && !todoToToggle.completed && updated.completed) {
+          await profileStore.levelUp();
+        }
       } catch (error) {
         this.setError(
           `Todo更新エラー: ${
