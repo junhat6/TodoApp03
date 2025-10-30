@@ -30,24 +30,32 @@ DDDのレイヤード・アーキテクチャに沿った構成になってい�
 ### 開発環境の起動方法
 
 1. リポジトリをクローン
-   ```
+   ```bash
    git clone <repository-url>
-   cd server
+   cd TodoApp03
    ```
 
-2. PostgreSQLを起動（または適当なDocker環境）
-   ```
-   docker run --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=todo_app -p 5432:5432 -d postgres
+2. PostgreSQLをDocker Composeで起動
+   ```bash
+   docker-compose up -d
    ```
 
 3. アプリケーションをビルド＆実行
-   ```
+   ```bash
+   cd server
    ./gradlew bootRun
    ```
 
 4. アプリケーションにアクセス
    ```
    http://localhost:8080/api/todos
+   ```
+
+5. 停止する場合
+   ```bash
+   # アプリケーションを停止（Ctrl+C）
+   # PostgreSQLを停止
+   docker-compose down
    ```
 
 ## APIエンドポイント
